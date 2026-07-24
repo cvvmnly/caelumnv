@@ -964,14 +964,19 @@
                         <div class="popup-body">
                             <p>📁 System Archive Files Active...</p>
                             <div class="line"></div>
-                            <div class="archive-gallery">
-                                <a><img src="https://file.garden/ai5LuPrOLRCONCXy/GALLERY/two.jpg" alt="archive photo"></a>
-                                <a><img src="https://file.garden/ai5LuPrOLRCONCXy/GALLERY/twelve.jpg" alt="archive photo"></a>
-                                <a><img src="https://file.garden/ai5LuPrOLRCONCXy/GALLERY/thriteen.jpg" alt="archive photo"></a>
-                                <a><img src="https://file.garden/ai5LuPrOLRCONCXy/GALLERY/three.jpg" alt="archive photo"></a>
-                                <a><img src="https://file.garden/ai5LuPrOLRCONCXy/GALLERY/ten.jpg" alt="archive photo"></a>
-                                <a><img src="https://file.garden/ai5LuPrOLRCONCXy/GALLERY/six.jpg" alt="archive photo"></a>
+                            <div id="archive-gallery" class="archive-gallery"></div>
+                        </div>
+                    </div>
+
+                    <div id="image-viewer-popup" class="popup-window image-viewer-popup">
+                        <div class="popup-header" id="image-viewer-popup-header-drag">
+                            <span>image_viewer.exe</span>
+                            <div class="popup-dots">
+                                <button class="popup-close" type="button" data-close-popup="image-viewer-popup" aria-label="Close image popup">×</button>
                             </div>
+                        </div>
+                        <div class="popup-body">
+                            <img id="image-viewer-frame" class="image-viewer-frame" src="" alt="archive preview">
                         </div>
                     </div>
 
@@ -1628,6 +1633,50 @@
                 if (entries.length <= 1) track.style.animation = "none";
             }
 
+            function normalizeArchiveImages(rows) {
+                return rows
+                    .map((row) => getSheetValue(row, ["image", "img", "photo", "url", "profile"], 0))
+                    .filter(Boolean);
+            }
+
+            function createArchiveImage(url, label) {
+                const link = document.createElement("a");
+                link.href = "javascript:void(0);";
+                link.addEventListener("click", () => openImageViewer(url));
+
+                const image = document.createElement("img");
+                image.src = url;
+                image.alt = label;
+                link.appendChild(image);
+                return link;
+            }
+
+            function renderArchiveImages(images) {
+                const preview = document.getElementById("visual-archive-preview");
+                const gallery = document.getElementById("archive-gallery");
+                if (!images.length) return;
+
+                if (preview) {
+                    preview.innerHTML = "";
+                    images.slice(0, 6).forEach((url) => preview.appendChild(createArchiveImage(url, "gallery")));
+                }
+
+                if (gallery) {
+                    gallery.innerHTML = "";
+                    images.forEach((url) => gallery.appendChild(createArchiveImage(url, "archive photo")));
+                }
+            }
+
+            function bindExistingArchiveImages() {
+                document.querySelectorAll("#visual-archive-preview a, #archive-gallery a").forEach((link) => {
+                    const image = link.querySelector("img");
+                    if (!image || !image.src) return;
+
+                    link.href = "javascript:void(0);";
+                    link.addEventListener("click", () => openImageViewer(image.src));
+                });
+            }
+
             async function loadDynamicContent() {
                 fetchSheetRows(sheetSources.siteUpdate)
                     .then((rows) => renderLogList("site-update-list", rows))
@@ -1636,6 +1685,10 @@
                 fetchSheetRows(sheetSources.relations)
                     .then((rows) => renderRelationCarousel(normalizeRelations(rows)))
                     .catch(() => renderRelationCarousel([]));
+
+                fetchSheetRows(sheetSources.visualArchive)
+                    .then((rows) => renderArchiveImages(normalizeArchiveImages(rows)))
+                    .catch(() => {});
             }
 
             // Draggable Popup Interface Management Engine Logic
@@ -1697,6 +1750,32 @@
                 popup.style.transform = "translate(-50%, -50%)";
                 popup.style.display = "block";
                 bringPopupToFront(popup);
+            }
+
+            function openImageViewer(url) {
+                const popup = document.createElement("div");
+                const popupId = "image-viewer-popup-" + Date.now() + "-" + Math.floor(Math.random() * 1000);
+                popup.id = popupId;
+                popup.className = "popup-window image-viewer-popup";
+                popup.innerHTML = '<div class="popup-header" id="' + popupId + '-header-drag"><span>image_viewer.exe</span><div class="popup-dots"><button class="popup-close" type="button" aria-label="Close image popup">×</button></div></div><div class="popup-body"><img class="image-viewer-frame" src="" alt="archive preview"></div>';
+
+                const frame = popup.querySelector(".image-viewer-frame");
+                const closeButton = popup.querySelector(".popup-close");
+                frame.src = url;
+
+                closeButton.addEventListener("click", () => popup.remove());
+                frame.addEventListener("click", () => popup.remove());
+                popup.querySelector(".popup-body").addEventListener("click", (event) => {
+                    if (event.target === event.currentTarget) popup.remove();
+                });
+
+                document.body.appendChild(popup);
+                popup.style.top = "50%";
+                popup.style.left = "50%";
+                popup.style.transform = "translate(-50%, -50%)";
+                popup.style.display = "block";
+                bringPopupToFront(popup);
+                dragElement(popup);
             }
 
             function dragElement(elmnt) {
@@ -1772,6 +1851,35 @@
                         event.stopPropagation();
                         closeTarget();
                     });
+                });
+            }
+
+            function bindImageViewerClose() {
+                const popup = document.getElementById("image-viewer-popup");
+                const frame = document.getElementById("image-viewer-frame");
+                if (!popup || !frame) return;
+
+                frame.addEventListener("click", () => closePopupById("image-viewer-popup"));
+
+                popup.querySelector(".popup-body").addEventListener("click", (event) => {
+                    if (event.target === event.currentTarget) {
+                        closePopupById("image-viewer-popup");
+                    }
+                });
+
+                document.addEventListener("keydown", (event) => {
+                    if (event.key === "Escape") {
+                        const imagePopups = [...document.querySelectorAll(".image-viewer-popup")]
+                            .filter((viewer) => viewer.style.display === "block");
+                        const topImagePopup = imagePopups.sort((a, b) => Number(b.style.zIndex || 0) - Number(a.style.zIndex || 0))[0];
+
+                        if (!topImagePopup) return;
+                        if (topImagePopup.id === "image-viewer-popup") {
+                            closePopupById("image-viewer-popup");
+                        } else {
+                            topImagePopup.remove();
+                        }
+                    }
                 });
             }
 
@@ -2101,10 +2209,12 @@
             setInterval(updatePhilippinesTimeAndDate, 1000);
             fetchPhilippinesWeather();
             setInterval(fetchPhilippinesWeather, 600000);
+            bindExistingArchiveImages();
             loadDynamicContent();
             setInterval(loadDynamicContent, 300000);
             bindReadMoreToggles();
             bindPopupCloseButtons();
+            bindImageViewerClose();
             rotateRandomMood();
             loadTrack(track_index, true);
 
