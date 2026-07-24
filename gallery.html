@@ -163,6 +163,25 @@
                 padding: 10px;
             }
 
+            .gallery-status {
+                font-family: monospace, sans-serif;
+                font-size: 10px;
+                color: var(--text-accent);
+                margin-bottom: 8px;
+                text-transform: uppercase;
+            }
+
+            .gallery-loading {
+                font-family: monospace, sans-serif;
+                font-size: 10px;
+                color: var(--text-main);
+                text-transform: uppercase;
+                padding: 10px 0;
+                text-align: center;
+                border: 1px dashed var(--border-color);
+                background: var(--bg-main);
+            }
+
             .gallery-grid {
                 display: grid;
                 grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -316,6 +335,7 @@
             </div>
 
             <div class="gallery-card">
+                <p class="gallery-status">📁 System Archive Files Active...</p>
                 <div id="gallery-grid" class="gallery-grid"></div>
             </div>
 
@@ -384,6 +404,16 @@
                 image.alt = label;
                 link.appendChild(image);
                 return link;
+            }
+
+            function renderLoadingState() {
+                const gallery = document.getElementById("gallery-grid");
+                if (!gallery) return;
+                gallery.innerHTML = "";
+                const loading = document.createElement("div");
+                loading.className = "gallery-loading";
+                loading.textContent = "Loading...";
+                gallery.appendChild(loading);
             }
 
             function renderArchiveImages(images) {
@@ -494,6 +524,7 @@
             }
 
             async function loadGalleryContent() {
+                renderLoadingState();
                 fetchSheetRows(sheetSources.visualArchive)
                     .then((rows) => renderArchiveImages(normalizeArchiveImages(rows)))
                     .catch(() => renderArchiveImages([]));
@@ -506,4 +537,3 @@
         </script>
     </body>
 </html>
-
