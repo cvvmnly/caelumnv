@@ -211,7 +211,40 @@
                 padding: 8px;
             }
 
-            .terminal-body p { margin-bottom: 4px; }
+            .terminal-body p {
+                margin-bottom: 6px;
+            }
+            .read-more-copy {
+                display: -webkit-box;
+                max-height: 70px;
+                overflow: hidden;
+                -webkit-box-orient: vertical;
+                -webkit-line-clamp: 5;
+            }
+            .read-more-copy.is-expanded {
+                display: block;
+                max-height: none;
+                -webkit-line-clamp: unset;
+            }
+            .read-more-toggle {
+                appearance: none;
+                -webkit-appearance: none;
+                border: 0;
+                background: transparent;
+                color: #8cb4e2;
+                cursor: pointer;
+                font: inherit;
+                letter-spacing: inherit;
+                padding: 0;
+                text-shadow: inherit;
+                touch-action: manipulation;
+            }
+            .read-more-toggle:hover,
+            .read-more-toggle:focus-visible {
+                color: var(--text-accent);
+                outline: none;
+                text-decoration: underline;
+            }
             .line {
                 height: 0;
                 border-bottom: 1px dashed var(--border-color);
@@ -347,7 +380,18 @@
                     <div class="terminal-card">
                         <div class="terminal-header">disclaimer <div class="dots"><span>_</span><span>▢</span><span>×</span></div></div>
                         <div class="terminal-body">
-                            <p><b>This account is not affiliated with any of the artists, their teams, or their official representatives.</b> It is created solely for <u>roleplaying and entertainment purposes</u>.</p>
+                            <p id="disclaimer-copy" class="read-more-copy"><b>This account is not affiliated with any of the artists, their teams, or their official representatives.</b> It is created solely for <u>roleplaying and entertainment purposes</u>. All characters, settings, and scenarios are fictional, and any resemblance to real individuals or organizations is purely coincidental. <b>No ownership is claimed over any media used in roleplay content;</b> all rights remain with their respective owners. If anything shared here causes discomfort or concern, feel free to reach out directly.</p>
+                            <div class="line"></div>
+                            <button class="read-more-toggle" type="button" data-read-more-target="disclaimer-copy" aria-expanded="false" aria-controls="disclaimer-copy">Read More &raquo;</button>
+                        </div>
+                    </div>
+
+                    <div class="terminal-card">
+                        <div class="terminal-header">before you follow <div class="dots"><span>_</span><span>▢</span><span>×</span></div></div>
+                        <div class="terminal-body">
+                            <p id="before-follow-copy" class="read-more-copy">Roleplay account. More active on tl than in DMs, so expect random interactions/replies. <b>Strictly platonic flirting.</b> English and Filipino plotting; mirrored semi-descriptive or descriptive lit. Does not typically use tone indicators. <u>Friends over followers.</u> IC and OOC are kept separate at all times. <b>Soft block to unfollow.</b></p>
+                            <div class="line"></div>
+                            <button class="read-more-toggle" type="button" data-read-more-target="before-follow-copy" aria-expanded="false" aria-controls="before-follow-copy">Read More &raquo;</button>
                         </div>
                     </div>
 
@@ -355,6 +399,40 @@
                         <div class="terminal-header">status <div class="dots"><span>_</span><span>▢</span><span>×</span></div></div>
                         <div class="terminal-body">
                             <b>Currently:</b> <span style="color: var(--text-accent);">bored 😴</span>
+                        </div>
+                    </div>
+
+                    <div class="terminal-card">
+                        <div class="terminal-header">listening now.. <div class="dots"><span>_</span><span>▢</span><span>×</span></div></div>
+                        <div class="terminal-body">
+                            <div style="display:flex; flex-direction:column; gap:6px;">
+                                <div style="font-family:monospace; font-size:10px; color:var(--text-heading);">Track Name</div>
+                                <div style="font-family:monospace; font-size:10px; color:var(--text-main);">Track Artist</div>
+                                <div style="font-family:monospace; font-size:10px; color:var(--text-accent);">PLAYING x OF y</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="terminal-card">
+                        <div class="terminal-header">currently <div class="dots"><span>_</span><span>▢</span><span>×</span></div></div>
+                        <div class="terminal-body">
+                            <b>Date</b> <span id="current-date">--.--.----</span><br>
+                            <b>Weather</b> <span>loading...</span><br>
+                            <b>Watching</b> organic chem tutor<br>
+                            <b>Coding</b> terminal build<br>
+                            <b>Eating</b> breakfast<br>
+                            <b>Drinking</b> coffee<br>
+                            <b>Loving</b> myself<br>
+                            <b>Hating</b> integration
+                        </div>
+                    </div>
+
+                    <div class="terminal-card">
+                        <div class="terminal-header">calendar <div class="dots"><span>_</span><span>▢</span><span>×</span></div></div>
+                        <div class="terminal-body" style="padding:10px 8px;">
+                            <div style="font-family:monospace; font-size:13px; color:var(--text-heading); line-height:1.6; letter-spacing:0.5px;">No events yet.</div>
+                            <div class="line" style="margin-top:8px;margin-bottom:6px;"></div>
+                            <a href="#" style="font-size:10px;">View Calendar &raquo;</a>
                         </div>
                     </div>
                 </aside>
@@ -403,6 +481,19 @@
         </div>
 
         <script>
+            function bindReadMoreToggles() {
+                document.querySelectorAll("[data-read-more-target]").forEach((toggle) => {
+                    const copy = document.getElementById(toggle.dataset.readMoreTarget);
+                    if (!copy) return;
+
+                    toggle.addEventListener("click", () => {
+                        const isExpanded = copy.classList.toggle("is-expanded");
+                        toggle.setAttribute("aria-expanded", String(isExpanded));
+                        toggle.innerHTML = isExpanded ? "Read Less &laquo;" : "Read More &raquo;";
+                    });
+                });
+            }
+
             function updatePhilippinesTimeAndDate() {
                 const timeElement = document.getElementById('philippines-time');
                 const now = new Date();
@@ -413,6 +504,7 @@
             }
             updatePhilippinesTimeAndDate();
             setInterval(updatePhilippinesTimeAndDate, 1000);
+            bindReadMoreToggles();
         </script>
     </body>
 </html>
