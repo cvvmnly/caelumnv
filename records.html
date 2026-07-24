@@ -1,0 +1,418 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=640">
+        <title>CAELUM — records</title>
+
+        <link rel="icon" type="image/png" href="icon.png">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+
+        <style>
+            :root {
+                --space: 8px;
+                --bg-main: #0b0f17;
+                --bg-box: #131824;
+                --border-color: #243146;
+                --text-main: #9cb1c9;
+                --text-accent: #6fa0db;
+                --text-heading: #eef5fc;
+            }
+
+            * { box-sizing: border-box; margin: 0; padding: 0; }
+            html, body { height: 100%; background: var(--bg-main); }
+            body {
+                font: 11px calibri, tahoma, verdana, arial, sans-serif;
+                color: var(--text-main);
+                text-shadow: 0px 1px 1px #000;
+                letter-spacing: 0.5px;
+                line-height: 14px;
+                padding: 20px;
+                overflow-y: auto;
+            }
+
+            body::before {
+                content: "";
+                position: fixed;
+                inset: 0;
+                background: repeating-linear-gradient(
+                    to bottom,
+                    rgba(255,255,255,0.006),
+                    rgba(255,255,255,0.006) 1px,
+                    transparent 1px,
+                    transparent 2px
+                );
+                pointer-events: none;
+                z-index: 1000;
+            }
+
+            .shell {
+                margin: 0 auto;
+                width: 100%;
+                max-width: 640px;
+                background: var(--bg-main);
+                padding: 0 var(--space) var(--space) var(--space);
+            }
+
+            .top-deck {
+                position: sticky;
+                top: 0;
+                z-index: 100;
+                background: var(--bg-main);
+                border-bottom: 1px dashed var(--border-color);
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 6px 0;
+                margin-bottom: var(--space);
+            }
+
+            .top-deck .brand {
+                font-family: monospace, sans-serif;
+                font-size: 10px;
+                font-weight: bold;
+                color: var(--text-heading);
+            }
+
+            .top-deck .readout {
+                font-family: monospace, sans-serif;
+                font-size: 10px;
+                color: var(--text-main);
+                flex: 1;
+                text-align: center;
+            }
+
+            .top-deck .shortcuts {
+                font-family: monospace, sans-serif;
+                font-size: 10px;
+            }
+
+            .top-deck .shortcuts a {
+                color: #8cb4e2;
+                text-decoration: none;
+                margin-left: 6px;
+            }
+
+            .top-deck .shortcuts a:hover { color: var(--text-accent); }
+
+            .billboard {
+                border: 1px solid var(--border-color);
+                padding: 35px 15px;
+                background: #0e131f;
+                text-align: center;
+                margin-top: var(--space);
+                margin-bottom: 0;
+            }
+
+            .billboard-title {
+                font: 22px georgia, serif;
+                letter-spacing: 3px;
+                color: var(--text-accent);
+            }
+
+            .billboard-caption {
+                margin-top: 6px;
+                font-style: italic;
+                font-size: 10px;
+                color: #61778f;
+            }
+
+            .deck-nav {
+                border: 1px solid var(--border-color);
+                border-top: none;
+                background: var(--bg-main);
+                padding: 4px var(--space);
+                margin-bottom: var(--space);
+                text-align: center;
+            }
+
+            .deck-nav a {
+                font-family: monospace, sans-serif;
+                font-size: 11px;
+                text-transform: uppercase;
+                color: #8cb4e2;
+                text-decoration: none;
+                padding: 5px 10px;
+                margin: 0 2px;
+                background: var(--bg-box);
+                border: 1px dotted var(--border-color);
+            }
+
+            .deck-nav a:hover {
+                color: #fff;
+                background: #2a374d;
+            }
+
+            .workspace {
+                display: flex;
+                gap: var(--space);
+            }
+
+            .left-pane {
+                width: 190px;
+                flex-shrink: 0;
+            }
+
+            .right-pane {
+                flex-grow: 1;
+                width: 0;
+            }
+
+            .terminal-card {
+                margin-bottom: var(--space);
+            }
+
+            .terminal-header {
+                font-family: monospace, sans-serif;
+                font-size: 9px;
+                font-weight: bold;
+                text-transform: uppercase;
+                color: var(--text-heading);
+                background: #17202e;
+                padding: 4px 6px;
+                border: 1px solid var(--border-color);
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            .terminal-header .dots {
+                display: flex;
+                gap: 3px;
+            }
+
+            .terminal-header .dots span {
+                width: 11px;
+                height: 11px;
+                border: 1px solid var(--border-color);
+                font-family: monospace, sans-serif;
+                font-size: 9px;
+                line-height: 9px;
+                text-align: center;
+                color: var(--text-accent);
+                cursor: pointer;
+                opacity: 0.7;
+                background: transparent;
+            }
+
+            .terminal-header .dots span:hover {
+                background: var(--border-color);
+                color: #fff;
+                opacity: 1;
+            }
+
+            .terminal-body {
+                background: var(--bg-box);
+                border: 1px solid var(--border-color);
+                border-top: none;
+                padding: 8px;
+            }
+
+            .terminal-body p { margin-bottom: 4px; }
+            .line {
+                height: 0;
+                border-bottom: 1px dashed var(--border-color);
+                margin-top: 4px;
+                margin-bottom: 4px;
+            }
+
+            .profile-card {
+                display: flex;
+                gap: 8px;
+                align-items: flex-start;
+            }
+
+            .profile-icon {
+                width: 64px;
+                height: 64px;
+                object-fit: cover;
+                border: 1px solid var(--border-color);
+                flex-shrink: 0;
+            }
+
+            .profile-copy {
+                font-size: 10px;
+                line-height: 14px;
+            }
+
+            .twin-grid {
+                display: flex;
+                gap: var(--space);
+                margin-bottom: var(--space);
+            }
+
+            .grid-cell {
+                flex: 1;
+                background: var(--bg-box);
+                border: 1px solid var(--border-color);
+                padding: 6px;
+            }
+
+            .cell-title {
+                font-family: monospace, sans-serif;
+                font-size: 9px;
+                font-weight: bold;
+                text-transform: uppercase;
+                color: var(--text-accent);
+                border-bottom: 1px dotted var(--border-color);
+                padding-bottom: 2px;
+                margin-bottom: 4px;
+            }
+
+            .log-entry {
+                padding: 4px 0;
+                border-bottom: 1px dashed var(--border-color);
+            }
+
+            .log-entry:last-child { border-bottom: none; }
+            .log-entry p { margin-top: 2px; }
+            .base-floor {
+                border: 1px solid var(--border-color);
+                background: var(--bg-box);
+                padding: 4px;
+                text-align: center;
+                margin-top: var(--space);
+                font-size: 10px;
+            }
+
+            .history-records {
+                border: 1px solid var(--border-color);
+                background: var(--bg-box);
+                padding: 10px;
+                min-height: 120px;
+            }
+
+            .history-records-title {
+                font-family: monospace, sans-serif;
+                font-size: 11px;
+                text-transform: uppercase;
+                color: var(--text-accent);
+                margin-bottom: 4px;
+            }
+
+            .history-records-body {
+                border: 1px dashed var(--border-color);
+                background: var(--bg-main);
+                padding: 12px;
+                text-align: center;
+                color: var(--text-main);
+                font-family: monospace, sans-serif;
+                font-size: 10px;
+                text-transform: uppercase;
+            }
+
+            @media (max-width: 800px) {
+                .top-deck .readout { display: none; }
+                .workspace { display: block; }
+                .left-pane { width: 100%; }
+                .right-pane { width: 100%; }
+                .twin-grid { display: block; }
+            }
+        </style>
+    </head>
+
+    <body>
+        <div class="shell">
+            <header class="top-deck">
+                <div class="brand">caelumnv_sys</div>
+                <div id="text-clock" class="readout">
+                    <span id="philippines-time"></span> // <span id="weatherWidget">⏳</span>
+                </div>
+                <div class="shortcuts"></div>
+            </header>
+
+            <div class="billboard">
+                <div class="billboard-inner">
+                    <div class="billboard-title">caelumnv.com</div>
+                    <div class="billboard-caption">The horizon is a promise that keeps moving so ambition learns endurance.</div>
+                </div>
+            </div>
+
+            <div class="deck-nav">
+                <nav>
+                    <a href="index.html">home</a>
+                    <a href="about.html">about</a>
+                    <a href="records.html">records</a>
+                    <a href="gallery.html">photos</a>
+                    <a href="links.html">links</a>
+                    <a href="#">guestbook</a>
+                </nav>
+            </div>
+
+            <div class="workspace">
+                <aside class="left-pane">
+                    <div class="terminal-card">
+                        <div class="terminal-header">disclaimer <div class="dots"><span>_</span><span>▢</span><span>×</span></div></div>
+                        <div class="terminal-body">
+                            <p><b>This account is not affiliated with any of the artists, their teams, or their official representatives.</b> It is created solely for <u>roleplaying and entertainment purposes</u>.</p>
+                        </div>
+                    </div>
+
+                    <div class="terminal-card">
+                        <div class="terminal-header">status <div class="dots"><span>_</span><span>▢</span><span>×</span></div></div>
+                        <div class="terminal-body">
+                            <b>Currently:</b> <span style="color: var(--text-accent);">bored 😴</span>
+                        </div>
+                    </div>
+                </aside>
+
+                <div class="right-pane">
+                    <div class="terminal-card">
+                        <div class="terminal-header">sys_profile.txt <div class="dots"><span>_</span><span>▢</span><span>×</span></div></div>
+                        <div class="terminal-body">
+                            <div class="profile-card">
+                                <img class="profile-icon" src="https://file.garden/ai5LuPrOLRCONCXy/PROFILES/930727293c0bcbb9fcd9f95619d45ba1.jpg" alt="Caelum profile icon">
+                                <blockquote class="profile-copy">
+                                    <b>Name:</b> Caelum Nikolaj Vergara<br>
+                                    <b>Pronouns:</b> He/Him<br>
+                                    <b>Location:</b> Manila, PH<br>
+                                    Master’s student in Aerospace Engineering. Works part-time as a contract-based Mechanical Design Engineer. Born August 14. Hyuka FC. Strictly in-character.
+                                </blockquote>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="twin-grid">
+                        <div class="grid-cell">
+                            <div class="cell-title">site_update.log</div>
+                            <div class="log-entry">
+                                <b>loading...</b>
+                                <p>Fetching site update logs.</p>
+                            </div>
+                        </div>
+                        <div class="grid-cell">
+                            <div class="cell-title">relations.txt</div>
+                            <div class="log-entry">
+                                <b>loading...</b>
+                                <p>Fetching relation logs.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="history-records">
+                        <div class="history-records-title">history records</div>
+                        <div class="history-records-body">TBA</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="base-floor">Copyright &copy; Caelum 2026-infinity. All operations online.</div>
+        </div>
+
+        <script>
+            function updatePhilippinesTimeAndDate() {
+                const timeElement = document.getElementById('philippines-time');
+                const now = new Date();
+                if (timeElement) {
+                    const timeOptions = { timeZone: 'Asia/Manila', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
+                    timeElement.textContent = new Intl.DateTimeFormat('en-US', timeOptions).format(now) + ' PHT';
+                }
+            }
+            updatePhilippinesTimeAndDate();
+            setInterval(updatePhilippinesTimeAndDate, 1000);
+        </script>
+    </body>
+</html>
