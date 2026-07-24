@@ -852,7 +852,7 @@
                                     <div class="volume-trigger">
                                         <i class="fa fa-volume-down"></i>
                                         <div class="volume-slider-wrapper">
-                                            <input type="range" min="0" max="100" value="80" class="volume_slider" oninput="setVolume()">
+                                            <input type="range" min="0" max="100" value="35" class="volume_slider" oninput="setVolume()">
                                         </div>
                                     </div>
                                 </div>
@@ -1324,6 +1324,15 @@
             const curr_time = document.querySelector("#audio-deck .current-time");
             const total_duration = document.querySelector("#audio-deck .total-duration");
             const now_playing = document.querySelector("#audio-deck .counter");
+
+            function shuffleTrackList() {
+                for (let i = track_list.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [track_list[i], track_list[j]] = [track_list[j], track_list[i]];
+                }
+            }
+
+            shuffleTrackList();
 
             function loadTrack(index, shouldAutoPlay = false) {
                 clearInterval(updateTimer);
