@@ -836,9 +836,9 @@
                 <nav>
                     <a href="index.html">home</a>
                     <a href="about.html">about</a>
-                    <a href="#">records</a>
+                    <a href="records.html">records</a>
                     <a href="gallery.html">photos</a>
-                    <a href="#">links</a>
+                    <a href="links.html">links</a>
                     <a href="#">guestbook</a>
                 </nav>
             </div>
@@ -1374,6 +1374,7 @@
             const curr_time = document.querySelector("#audio-deck .current-time");
             const total_duration = document.querySelector("#audio-deck .total-duration");
             const now_playing = document.querySelector("#audio-deck .counter");
+            const BASE_AUDIO_VOLUME = 0.45;
 
             function shuffleTrackList() {
                 for (let i = track_list.length - 1; i > 0; i--) {
@@ -1450,7 +1451,7 @@
             }
 
             function setVolume() {
-                curr_track.volume = volume_slider.value / 100;
+                curr_track.volume = (volume_slider.value / 100) * BASE_AUDIO_VOLUME;
             }
 
             function seekUpdate() {
