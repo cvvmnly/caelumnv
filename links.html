@@ -289,7 +289,7 @@
                 color: #8cb4e2;
                 text-decoration: none;
                 font-family: monospace, sans-serif;
-                font-size: 10px;
+                font-size: 11px;
                 text-transform: uppercase;
             }
 
@@ -298,6 +298,28 @@
                 color: #fff;
                 background: #2a374d;
                 outline: none;
+            }
+
+            .additional-layout {
+                display: grid;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 8px;
+            }
+
+            .additional-cell {
+                border: 1px dashed var(--border-color);
+                background: var(--bg-main);
+                padding: 8px;
+                min-height: 56px;
+            }
+
+            .additional-cell-title {
+                font-family: monospace, sans-serif;
+                font-size: 9px;
+                font-weight: bold;
+                text-transform: uppercase;
+                color: var(--text-accent);
+                margin-bottom: 4px;
             }
 
             .line {
@@ -1101,10 +1123,25 @@
                         <div class="terminal-header">links <div class="dots"><span>_</span><span>▢</span><span>×</span></div></div>
                         <div class="terminal-body">
                             <div class="links-grid">
-                                <a class="link-button" href="https://x.com/caelumnv">MAIN</a>
-                                <a class="link-button" href="https://x.com/vgracn">SIDE</a>
-                                <a class="link-button" href="https://open.spotify.com/user/31nzuh6bbtwufbjf2kcco7bksrxe?si=311dfc765d274fcb">SPOTIFY</a>
-                                <a class="link-button" href="#">t.b.a.</a>
+                                <a class="link-button" href="#">link 01</a>
+                                <a class="link-button" href="#">link 02</a>
+                                <a class="link-button" href="#">link 03</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="terminal-card">
+                        <div class="terminal-header">additional <div class="dots"><span>_</span><span>▢</span><span>×</span></div></div>
+                        <div class="terminal-body">
+                            <div class="additional-layout">
+                                <div class="additional-cell">
+                                    <div class="additional-cell-title">social</div>
+                                    <div>twitter — @caelumnv</div>
+                                </div>
+                                <div class="additional-cell">
+                                    <div class="additional-cell-title">username</div>
+                                    <div>caelumnv</div>
+                                </div>
                             </div>
                         </div>
                     </div>
