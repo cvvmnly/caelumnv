@@ -750,6 +750,16 @@
                 height: 320px;
             }
 
+            .image-viewer-frame {
+                display: block;
+                max-width: 100%;
+                max-height: calc(100vh - 110px);
+                object-fit: contain;
+                margin: 0 auto;
+                border: 1px solid var(--border-color);
+                background: var(--bg-main);
+            }
+
             .archive-gallery {
                 --archive-gap: 4px;
                 display: grid;
@@ -1036,9 +1046,9 @@
                         <div class="terminal-header">interest.txt <div class="dots"><span>_</span><span>▢</span><span>×</span></div></div>
                         <div class="terminal-body">
                             <blockquote>
-                                <b>LIKES:</b> </br>formula 1, fried chicken, seafood (SARAP), sponty road trips, movie nights, filipino films like I'm Drunk & I Love You and The Hows of Us, guitars, trying out different instruments, hoodies, rainy days, music on full volume, eating with friends.
+                                <b>LIKES:</b> </br>formula 1, fried chicken, seafood (SARAP), sponty road trips, movie nights, filipino films like <i>I'm Drunk I Love You & The Hows of Us</i>, guitars, trying out different instruments, rainy days, music habang bumibiyahe, eating with people
                                 <div class="line"></div>
-                                <b>DISLIKES:</b> </br>coffee & energy drinks(di worth nung palpitations), kumain mag-isa, Flying ipis. Yung biglang lilipad papunta sa'yo. Actually, ipis in general. Low battery, traffic, people na hindi marunong magbalik ng hiniram (you know who you are).
+                                <b>DISLIKES:</b> </br>coffee & energy drinks(di worth nung palpitations), kumain mag-isa, Flying ipis. Yung biglang lilipad papunta sa'yo. Actually, ipis in general. Low battery, traffic, people na hindi marunong magbalik ng hiniram (you know who you are)
                         </div>
                     </div>
 
@@ -1059,14 +1069,6 @@
                         </div>
                     </div>
 
-                    <div class="terminal-card">
-                        <div class="terminal-header">stamps_inventory.zip <div class="dots"><span>_</span><span>▢</span><span>×</span></div></div>
-                        <div class="terminal-body">
-                            <div class="sticker-row">
-                                <div class="sticker"><img src="https://file.garden/ai5LuPrOLRCONCXy/STAMP%20GALLERY/MALE.png" alt="MALE"></div><div class="sticker"><img src="https://file.garden/ai5LuPrOLRCONCXy/STAMP%20GALLERY/FILIPINO.png" alt="FILIPINO"></div><div class="sticker"><img src="https://file.garden/ai5LuPrOLRCONCXy/STAMP%20GALLERY/BISEXUAL.png" alt="BISEXUAL"></div><div class="sticker"><img src="https://file.garden/ai5LuPrOLRCONCXy/STAMP%20GALLERY/STUDENT.png" alt="STUDENT"></div><div class="sticker"><img src="https://file.garden/ai5LuPrOLRCONCXy/STAMP%20GALLERY/ENGINEER.png" alt="ENGINEER"></div><div class="sticker"><img src="https://file.garden/ai5LuPrOLRCONCXy/STAMP%20GALLERY/AVIATION.png" alt="AVIATION"></div><div class="sticker"><img src="https://file.garden/ai5LuPrOLRCONCXy/STAMP%20GALLERY/BEST%20BIG%20BRO.png" alt="BEST BIG BRO"></div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
 
@@ -1898,6 +1900,7 @@
 
             dragElement(document.getElementById("archive-popup"));
             dragElement(document.getElementById("calendar-popup"));
+            dragElement(document.getElementById("image-viewer-popup"));
 
             // Google Calendar API
             const gcalApiKey = "AIzaSyArJFBiBtSAh-k_xUByTLmfiZURYu91nrw";
