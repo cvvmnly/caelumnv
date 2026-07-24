@@ -398,17 +398,52 @@
                     <div class="terminal-card">
                         <div class="terminal-header">status <div class="dots"><span>_</span><span>▢</span><span>×</span></div></div>
                         <div class="terminal-body">
-                            <b>Currently:</b> <span style="color: var(--text-accent);">bored 😴</span>
+                            <b>Currently:</b> <span id="dynamic-mood-field" style="color: var(--text-accent);">bored 😴</span>
                         </div>
                     </div>
 
                     <div class="terminal-card">
-                        <div class="terminal-header">listening now.. <div class="dots"><span>_</span><span>▢</span><span>×</span></div></div>
+                        <div class="terminal-header">
+                            listening now..
+                            <div class="dots"><span>_</span><span>▢</span><span>×</span></div>
+                        </div>
                         <div class="terminal-body">
-                            <div style="display:flex; flex-direction:column; gap:6px;">
-                                <div style="font-family:monospace; font-size:10px; color:var(--text-heading);">Track Name</div>
-                                <div style="font-family:monospace; font-size:10px; color:var(--text-main);">Track Artist</div>
-                                <div style="font-family:monospace; font-size:10px; color:var(--text-accent);">PLAYING x OF y</div>
+                            <div id="audio-deck">
+                                <div class="meta-box">
+                                    <div class="cover-art"></div>
+                                    <div class="counter">PLAYING x OF y</div>
+                                    <div style="display:flex; flex-direction:column;">
+                                        <div class="title-lbl">Track Name</div>
+                                        <div class="artist-lbl">Track Artist</div>
+                                    </div>
+                                </div>
+
+                                <div class="timeline-row">
+                                    <div class="timestamp current-time">00:00</div>
+                                    <input type="range" min="1" max="100" value="0" class="scrub-bar" onchange="seekTo()">
+                                    <div class="timestamp total-duration">00:00</div>
+                                </div>
+
+                                <div class="volume-container">
+                                    <div class="volume-trigger">
+                                        <i class="fa fa-volume-down"></i>
+                                        <div class="volume-slider-wrapper">
+                                            <input type="range" min="0" max="100" value="35" class="volume_slider" oninput="setVolume()">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="controls-row">
+                                    <div class="action-trigger prev-track" onclick="prevTrack()">
+                                        <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><path d="M30.71,229.47l188.87-113a30.54,30.54,0,0,1,31.09-.39,33.74,33.74,0,0,1,16.76,29.47V224.6L448.15,116.44a30.54,30.54,0,0,1,31.09-.39L496,145.52v221A33.73,33.73,0,0,1,479.24,396a30.54,30.54,0,0,1-31.09-.39L267.43,287.4v79.08A33.73,33.73,0,0,1,250.67,396a30.54,30.54,0,0,1-31.09-.39l-188.87-113a31.27,31.27,0,0,1,0-53Z"/></svg>
+                                    </div>
+                                    <div class="action-trigger playpause-track" onclick="playpauseTrack()">
+                                        <i class="fa fa-play fa-sm"></i>
+                                    </div>
+                                    <div class="action-trigger next-track" onclick="nextTrack()">
+                                        <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><path d="M481.29,229.47l-188.87-113a30.54,30.54,0,0,0-31.09-.39,33.74,33.74,0,0,0-16.76,29.47V224.6L63.85,116.44a30.54,30.54,0,0,0-31.09-.39A33.74,33.74,0,0,0,16,145.52v221A33.74,33.74,0,0,0,32.76,396a30.54,30.54,0,0,0,31.09-.39L244.57,287.4v79.08A33.74,33.74,0,0,0,261.33,396a30.54,30.54,0,0,0,31.09-.39l188.87-113a31.27,31.27,0,0,0,0-53Z"/></svg>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -417,11 +452,11 @@
                         <div class="terminal-header">currently <div class="dots"><span>_</span><span>▢</span><span>×</span></div></div>
                         <div class="terminal-body">
                             <b>Date</b> <span id="current-date">--.--.----</span><br>
-                            <b>Weather</b> <span>loading...</span><br>
+                            <b>Weather</b> <span id="current-weather">loading...</span><br>
                             <b>Watching</b> organic chem tutor<br>
                             <b>Coding</b> terminal build<br>
-                            <b>Eating</b> breakfast<br>
-                            <b>Drinking</b> coffee<br>
+                            <b>Eating</b> <span id="current-eating">breakfast</span><br>
+                            <b>Drinking</b> <span id="current-drinking">coffee</span><br>
                             <b>Loving</b> myself<br>
                             <b>Hating</b> integration
                         </div>
@@ -430,9 +465,15 @@
                     <div class="terminal-card">
                         <div class="terminal-header">calendar <div class="dots"><span>_</span><span>▢</span><span>×</span></div></div>
                         <div class="terminal-body" style="padding:10px 8px;">
-                            <div style="font-family:monospace; font-size:13px; color:var(--text-heading); line-height:1.6; letter-spacing:0.5px;">No events yet.</div>
+                            <div id="calendar-today-display" style="
+                                font-family: monospace;
+                                font-size: 13px;
+                                color: var(--text-heading);
+                                line-height: 1.6;
+                                letter-spacing: 0.5px;
+                            "></div>
                             <div class="line" style="margin-top:8px;margin-bottom:6px;"></div>
-                            <a href="#" style="font-size:10px;">View Calendar &raquo;</a>
+                            <a href="javascript:void(0);" onclick="openCalendarPopup()" style="font-size:10px;">View Calendar &raquo;</a>
                         </div>
                     </div>
                 </aside>
