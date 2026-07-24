@@ -274,6 +274,32 @@
 
             .center { text-align: center; }
 
+            .links-grid {
+                display: grid;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 6px;
+            }
+
+            .link-button {
+                display: block;
+                text-align: center;
+                padding: 8px 10px;
+                background: var(--bg-main);
+                border: 1px dotted var(--border-color);
+                color: #8cb4e2;
+                text-decoration: none;
+                font-family: monospace, sans-serif;
+                font-size: 10px;
+                text-transform: uppercase;
+            }
+
+            .link-button:hover,
+            .link-button:focus-visible {
+                color: #fff;
+                background: #2a374d;
+                outline: none;
+            }
+
             .line {
                 height: 0px;
                 border-bottom: 1px dashed var(--border-color);
