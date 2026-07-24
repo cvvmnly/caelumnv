@@ -301,6 +301,43 @@
                 padding: 6px;
             }
 
+            .image-matrix {
+                display: grid;
+                grid-template-columns: repeat(6, 1fr);
+                gap: 4px;
+            }
+
+            .image-matrix img {
+                width: 100%;
+                aspect-ratio: 1;
+                object-fit: cover;
+                border: 1px solid var(--border-color);
+                opacity: 0.5;
+                transition: opacity 0.2s, transform 0.1s;
+            }
+
+            .image-matrix img:hover {
+                opacity: 0.9;
+                transform: scale(1.02);
+            }
+
+            .sticker-row {
+                font-size: 0;
+                text-align: center;
+            }
+
+            .sticker {
+                display: inline-block;
+                padding: 0px;
+                margin: 0 -1px;
+            }
+
+            .sticker img {
+                display: block;
+                width: 100px;
+                height: auto;
+            }
+
             .cell-title {
                 font-family: monospace, sans-serif;
                 font-size: 9px;
