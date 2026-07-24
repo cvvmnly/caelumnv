@@ -1,0 +1,537 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=640">
+        <title>CAELUM — gallery</title>
+
+        <link rel="icon" type="image/png" href="icon.png">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+
+        <style>
+            :root {
+                --space: 8px;
+                --bg-main: #0b0f17;
+                --bg-box: #131824;
+                --border-color: #243146;
+                --text-main: #9cb1c9;
+                --text-accent: #6fa0db;
+                --text-heading: #eef5fc;
+            }
+
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+
+            html, body {
+                height: 100%;
+                background-color: var(--bg-main);
+            }
+
+            body {
+                font: 11px calibri, tahoma, verdana, arial, sans-serif;
+                color: var(--text-main);
+                text-shadow: 0px 1px 1px #000;
+                letter-spacing: 0.5px;
+                line-height: 14px;
+                padding: 20px;
+                overflow-y: auto;
+            }
+
+            body::before {
+                content: "";
+                position: fixed;
+                inset: 0;
+                background: repeating-linear-gradient(
+                    to bottom,
+                    rgba(255, 255, 255, 0.006),
+                    rgba(255, 255, 255, 0.006) 1px,
+                    transparent 1px,
+                    transparent 2px
+                );
+                pointer-events: none;
+                z-index: 1000;
+            }
+
+            .shell {
+                margin: 0 auto;
+                width: 100%;
+                max-width: 640px;
+                background: var(--bg-main);
+                padding: 0 var(--space) var(--space) var(--space);
+            }
+
+            .top-deck {
+                position: sticky;
+                top: 0;
+                z-index: 100;
+                background: var(--bg-main);
+                border-bottom: 1px dashed var(--border-color);
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 6px 0;
+                margin-bottom: var(--space);
+            }
+
+            .top-deck .brand {
+                font-family: monospace, sans-serif;
+                font-size: 10px;
+                font-weight: bold;
+                color: var(--text-heading);
+            }
+
+            .top-deck .readout {
+                font-family: monospace, sans-serif;
+                font-size: 10px;
+                color: var(--text-main);
+                flex: 1;
+                text-align: center;
+            }
+
+            .top-deck .shortcuts {
+                font-family: monospace, sans-serif;
+                font-size: 10px;
+            }
+
+            .top-deck .shortcuts a {
+                color: #8cb4e2;
+                text-decoration: none;
+                margin-left: 6px;
+            }
+
+            .top-deck .shortcuts a:hover {
+                color: var(--text-accent);
+            }
+
+            .billboard {
+                border: 1px solid var(--border-color);
+                padding: 35px 15px;
+                background: #0e131f;
+                text-align: center;
+                margin-top: var(--space);
+                margin-bottom: 0;
+            }
+
+            .billboard-title {
+                font: 22px georgia, serif;
+                letter-spacing: 3px;
+                color: var(--text-accent);
+            }
+
+            .billboard-caption {
+                margin-top: 6px;
+                font-style: italic;
+                font-size: 10px;
+                color: #61778f;
+            }
+
+            .deck-nav {
+                border: 1px solid var(--border-color);
+                border-top: none;
+                background: var(--bg-main);
+                padding: 4px var(--space);
+                margin-bottom: var(--space);
+                text-align: center;
+            }
+
+            .deck-nav a {
+                font-family: monospace, sans-serif;
+                font-size: 11px;
+                text-transform: uppercase;
+                color: #8cb4e2;
+                text-decoration: none;
+                padding: 5px 10px;
+                margin: 0 2px;
+                background: var(--bg-box);
+                border: 1px dotted var(--border-color);
+            }
+
+            .deck-nav a:hover {
+                color: #fff;
+                background: #2a374d;
+            }
+
+            .gallery-card {
+                border: 1px solid var(--border-color);
+                background: var(--bg-box);
+                padding: 8px;
+            }
+
+            .gallery-card-header {
+                font-family: monospace, sans-serif;
+                font-size: 9px;
+                font-weight: bold;
+                text-transform: uppercase;
+                color: var(--text-heading);
+                background: #17202e;
+                padding: 4px 6px;
+                border: 1px solid var(--border-color);
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            .gallery-card-header .dots {
+                display: flex;
+                gap: 3px;
+            }
+
+            .gallery-card-header .dots span {
+                width: 11px;
+                height: 11px;
+                border: 1px solid var(--border-color);
+                font-family: monospace, sans-serif;
+                font-size: 9px;
+                line-height: 9px;
+                text-align: center;
+                color: var(--text-accent);
+                background: transparent;
+            }
+
+            .gallery-grid {
+                display: grid;
+                grid-template-columns: repeat(5, minmax(0, 1fr));
+                gap: 4px;
+                padding: 8px 0 0 0;
+            }
+
+            .gallery-grid a {
+                display: block;
+                aspect-ratio: 1;
+                overflow: hidden;
+                border: 1px solid var(--border-color);
+                background: var(--bg-main);
+            }
+
+            .gallery-grid img {
+                display: block;
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                opacity: 0.75;
+                transition: opacity 0.2s, transform 0.1s;
+            }
+
+            .gallery-grid img:hover {
+                opacity: 1;
+                transform: scale(1.03);
+            }
+
+            .popup-window {
+                position: fixed;
+                display: none;
+                z-index: 2000;
+                width: 420px;
+                max-width: calc(100vw - 20px);
+                min-height: 120px;
+                border: 1px solid var(--border-color);
+                background: var(--bg-main);
+                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.55);
+            }
+
+            .popup-header {
+                cursor: move;
+                user-select: none;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 6px 8px;
+                border-bottom: 1px dashed var(--border-color);
+                background: #17202e;
+                font-family: monospace, sans-serif;
+                font-size: 10px;
+                color: var(--text-heading);
+                text-transform: uppercase;
+            }
+
+            .popup-dots {
+                display: flex;
+                align-items: center;
+                gap: 4px;
+            }
+
+            .popup-close {
+                border: 1px solid var(--border-color);
+                background: transparent;
+                color: var(--text-accent);
+                cursor: pointer;
+                width: 24px;
+                height: 24px;
+                font-size: 16px;
+                line-height: 1;
+            }
+
+            .popup-close:hover {
+                background: var(--border-color);
+                color: #fff;
+            }
+
+            .popup-body {
+                padding: 8px;
+                background: var(--bg-box);
+            }
+
+            .line {
+                height: 0px;
+                border-bottom: 1px dashed var(--border-color);
+                margin-top: 4px;
+                margin-bottom: 4px;
+            }
+
+            .image-viewer-frame {
+                display: block;
+                max-width: 100%;
+                max-height: calc(100vh - 110px);
+                object-fit: contain;
+                margin: 0 auto;
+                border: 1px solid var(--border-color);
+                background: var(--bg-main);
+            }
+
+            .base-floor {
+                border: 1px solid var(--border-color);
+                background: var(--bg-box);
+                padding: 4px;
+                text-align: center;
+                margin-top: var(--space);
+                font-size: 10px;
+            }
+
+            @media (max-width: 800px) {
+                .gallery-grid {
+                    grid-template-columns: repeat(3, minmax(0, 1fr));
+                }
+            }
+        </style>
+    </head>
+
+    <body>
+        <div class="shell">
+            <header class="top-deck">
+                <div class="brand">caelumnv_sys</div>
+                <div id="text-clock" class="readout">
+                    <span id="philippines-time"></span> // <span id="weatherWidget">⏳</span>
+                </div>
+                <div class="shortcuts">
+                    <a href="index.html">home.</a>
+                    <a href="about.html">about.</a>
+                    <a href="gallery.html">gallery.</a>
+                </div>
+            </header>
+
+            <div class="billboard">
+                <div class="billboard-title">archive_gallery.exe</div>
+                <div class="billboard-caption">
+                    A full visual archive view with the same desktop-window feel as the rest of the site.
+                </div>
+            </div>
+
+            <div class="deck-nav">
+                <nav>
+                    <a href="index.html">home</a>
+                    <a href="about.html">about</a>
+                    <a href="gallery.html">gallery</a>
+                </nav>
+            </div>
+
+            <div class="gallery-card">
+                <div class="gallery-card-header">
+                    <span>visual_archive</span>
+                    <div class="dots"><span>_</span><span>▢</span><span>×</span></div>
+                </div>
+                <div id="gallery-grid" class="gallery-grid"></div>
+            </div>
+
+            <div class="base-floor">
+                Copyright &copy; Caelum 2026-infinity. All operations online.
+            </div>
+        </div>
+
+        <script>
+            const sheetSources = {
+                visualArchive: "https://script.google.com/macros/s/AKfycbwbd5o-dPVLl86fRamK3pzoLFJuuvHTXkfKv7WZyBJR5R91HcEO9vZ6a98_emOIIPdvbg/exec"
+            };
+
+            let topPopupZ = 2000;
+
+            function getSheetRows(data) {
+                if (Array.isArray(data)) return data;
+                if (!data || typeof data !== "object") return [];
+                if (Array.isArray(data.data)) return data.data;
+                if (Array.isArray(data.rows)) return data.rows;
+                if (Array.isArray(data.result)) return data.result;
+                return [];
+            }
+
+            function normalizeKey(value) {
+                return String(value || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+            }
+
+            function getRowValues(row) {
+                if (Array.isArray(row)) return row;
+                if (!row || typeof row !== "object") return [];
+                return Object.keys(row).map((key) => row[key]);
+            }
+
+            function getSheetValue(row, preferredNames, fallbackIndex) {
+                if (!row || typeof row !== "object") return "";
+                const keys = Object.keys(row);
+                const normalizedNames = preferredNames.map(normalizeKey);
+                const matchedKey = keys.find((key) => normalizedNames.includes(normalizeKey(key)));
+                if (matchedKey) return String(row[matchedKey] || "").trim();
+                const rowValues = getRowValues(row);
+                return rowValues[fallbackIndex] ? String(rowValues[fallbackIndex]).trim() : "";
+            }
+
+            async function fetchSheetRows(url) {
+                const separator = url.includes("?") ? "&" : "?";
+                const response = await fetch(url + separator + "_=" + Date.now(), { cache: "no-store" });
+                if (!response.ok) throw new Error("Sheet request failed");
+                const data = await response.json();
+                return getSheetRows(data);
+            }
+
+            function normalizeArchiveImages(rows) {
+                return rows
+                    .map((row) => getSheetValue(row, ["image", "img", "photo", "url", "profile"], 0))
+                    .filter(Boolean);
+            }
+
+            function createArchiveImage(url, label) {
+                const link = document.createElement("a");
+                link.href = "javascript:void(0);";
+                link.addEventListener("click", () => openImageViewer(url));
+
+                const image = document.createElement("img");
+                image.src = url;
+                image.alt = label;
+                link.appendChild(image);
+                return link;
+            }
+
+            function renderArchiveImages(images) {
+                const gallery = document.getElementById("gallery-grid");
+                if (!gallery) return;
+                gallery.innerHTML = "";
+
+                if (!images.length) {
+                    const empty = document.createElement("div");
+                    empty.className = "line";
+                    gallery.appendChild(empty);
+                    return;
+                }
+
+                images.forEach((url) => gallery.appendChild(createArchiveImage(url, "archive photo")));
+            }
+
+            function bringPopupToFront(popup) {
+                if (!popup) return;
+                topPopupZ += 1;
+                popup.style.zIndex = topPopupZ;
+            }
+
+            function openImageViewer(url) {
+                const popup = document.createElement("div");
+                const popupId = "image-viewer-popup-" + Date.now() + "-" + Math.floor(Math.random() * 1000);
+                popup.id = popupId;
+                popup.className = "popup-window image-viewer-popup";
+                popup.innerHTML = '<div class="popup-header" id="' + popupId + '-header-drag"><span>image_viewer.exe</span><div class="popup-dots"><button class="popup-close" type="button" aria-label="Close image popup">×</button></div></div><div class="popup-body"><img class="image-viewer-frame" src="" alt="archive preview"></div>';
+
+                const frame = popup.querySelector(".image-viewer-frame");
+                const closeButton = popup.querySelector(".popup-close");
+                frame.src = url;
+
+                closeButton.addEventListener("click", () => popup.remove());
+                frame.addEventListener("click", () => popup.remove());
+                popup.querySelector(".popup-body").addEventListener("click", (event) => {
+                    if (event.target === event.currentTarget) popup.remove();
+                });
+
+                document.body.appendChild(popup);
+                popup.style.top = "50%";
+                popup.style.left = "50%";
+                popup.style.transform = "translate(-50%, -50%)";
+                popup.style.display = "block";
+                bringPopupToFront(popup);
+                dragElement(popup);
+            }
+
+            function dragElement(elmnt) {
+                if (!elmnt) return;
+
+                let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+                const header = document.getElementById(elmnt.id + "-header-drag");
+
+                elmnt.addEventListener("pointerdown", () => bringPopupToFront(elmnt));
+
+                if (header) {
+                    header.addEventListener("pointerdown", dragMouseDown);
+                } else {
+                    elmnt.addEventListener("pointerdown", dragMouseDown);
+                }
+
+                function dragMouseDown(e) {
+                    e = e || window.event;
+                    if (e.target.closest && e.target.closest(".popup-close")) return;
+
+                    e.preventDefault();
+                    bringPopupToFront(elmnt);
+                    const rect = elmnt.getBoundingClientRect();
+                    elmnt.style.transform = "none";
+                    elmnt.style.top = rect.top + "px";
+                    elmnt.style.left = rect.left + "px";
+
+                    pos3 = e.clientX;
+                    pos4 = e.clientY;
+                    document.addEventListener("pointerup", closeDragElement);
+                    document.addEventListener("pointercancel", closeDragElement);
+                    document.addEventListener("pointermove", elementDrag);
+                }
+
+                function elementDrag(e) {
+                    e = e || window.event;
+                    e.preventDefault();
+                    pos1 = pos3 - e.clientX;
+                    pos2 = pos4 - e.clientY;
+                    pos3 = e.clientX;
+                    pos4 = e.clientY;
+                    elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+                    elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+                }
+
+                function closeDragElement() {
+                    document.removeEventListener("pointerup", closeDragElement);
+                    document.removeEventListener("pointercancel", closeDragElement);
+                    document.removeEventListener("pointermove", elementDrag);
+                }
+            }
+
+            function updatePhilippinesTimeAndDate() {
+                const timeElement = document.getElementById('philippines-time');
+                const now = new Date();
+
+                if (timeElement) {
+                    const timeOptions = { timeZone: 'Asia/Manila', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
+                    timeElement.textContent = new Intl.DateTimeFormat('en-US', timeOptions).format(now) + " PHT";
+                }
+            }
+
+            async function loadGalleryContent() {
+                fetchSheetRows(sheetSources.visualArchive)
+                    .then((rows) => renderArchiveImages(normalizeArchiveImages(rows)))
+                    .catch(() => renderArchiveImages([]));
+            }
+
+            updatePhilippinesTimeAndDate();
+            setInterval(updatePhilippinesTimeAndDate, 1000);
+            loadGalleryContent();
+            setInterval(loadGalleryContent, 300000);
+        </script>
+    </body>
+</html>
