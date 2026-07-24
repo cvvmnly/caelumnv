@@ -160,45 +160,14 @@
             .gallery-card {
                 border: 1px solid var(--border-color);
                 background: var(--bg-box);
-                padding: 8px;
-            }
-
-            .gallery-card-header {
-                font-family: monospace, sans-serif;
-                font-size: 9px;
-                font-weight: bold;
-                text-transform: uppercase;
-                color: var(--text-heading);
-                background: #17202e;
-                padding: 4px 6px;
-                border: 1px solid var(--border-color);
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-            }
-
-            .gallery-card-header .dots {
-                display: flex;
-                gap: 3px;
-            }
-
-            .gallery-card-header .dots span {
-                width: 11px;
-                height: 11px;
-                border: 1px solid var(--border-color);
-                font-family: monospace, sans-serif;
-                font-size: 9px;
-                line-height: 9px;
-                text-align: center;
-                color: var(--text-accent);
-                background: transparent;
+                padding: 10px;
             }
 
             .gallery-grid {
                 display: grid;
-                grid-template-columns: repeat(5, minmax(0, 1fr));
-                gap: 4px;
-                padding: 8px 0 0 0;
+                grid-template-columns: repeat(4, minmax(0, 1fr));
+                gap: 6px;
+                padding: 0;
             }
 
             .gallery-grid a {
@@ -207,6 +176,7 @@
                 overflow: hidden;
                 border: 1px solid var(--border-color);
                 background: var(--bg-main);
+                min-height: 100px;
             }
 
             .gallery-grid img {
@@ -321,14 +291,17 @@
                 <div class="shortcuts">
                     <a href="index.html">home.</a>
                     <a href="about.html">about.</a>
+                    <a href="#">records.</a>
                     <a href="gallery.html">gallery.</a>
+                    <a href="#">links.</a>
+                    <a href="#">guestbook.</a>
                 </div>
             </header>
 
             <div class="billboard">
-                <div class="billboard-title">archive_gallery.exe</div>
+                <div class="billboard-title">gallery</div>
                 <div class="billboard-caption">
-                    A full visual archive view with the same desktop-window feel as the rest of the site.
+                    The horizon is a promise that keeps moving so ambition learns endurance.
                 </div>
             </div>
 
@@ -336,15 +309,14 @@
                 <nav>
                     <a href="index.html">home</a>
                     <a href="about.html">about</a>
+                    <a href="#">records</a>
                     <a href="gallery.html">gallery</a>
+                    <a href="#">links</a>
+                    <a href="#">guestbook</a>
                 </nav>
             </div>
 
             <div class="gallery-card">
-                <div class="gallery-card-header">
-                    <span>visual_archive</span>
-                    <div class="dots"><span>_</span><span>▢</span><span>×</span></div>
-                </div>
                 <div id="gallery-grid" class="gallery-grid"></div>
             </div>
 
